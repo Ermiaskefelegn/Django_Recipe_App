@@ -9,7 +9,7 @@ on:
     branches:
       - main
     types:
-      - closed # Ensures it runs when a PR is merged
+      - closed # Ensure the workflow runs on PR merge
 
 jobs:
   test-lint:
@@ -32,14 +32,12 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USER }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Set up Docker Compose
-        run: sudo apt-get update && sudo apt-get install docker-compose-plugin -y
-
+      # Docker Compose is pre-installed in the GitHub Actions environment
       - name: Build Docker containers
-        run: docker compose build # Updated to docker compose
+        run: docker compose build
 
       - name: Run Tests
-        run: docker compose run --rm app sh -c "python manage.py test" # Updated to docker compose
+        run: docker compose run --rm app sh -c "python manage.py test"
 
       - name: Run Lint
-        run: docker compose run --rm app sh -c "flake8" # Updated to docker compose
+        run: docker compose run --rm app sh -c "flake8"
